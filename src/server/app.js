@@ -4,15 +4,17 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const staticAsset = require('static-asset');
+const ejsExtend = require('express-ejs-extend');
 
-require('dotenv').config();
+const indexRouter = require('./routes/index.js');
+const authRouter = require('./routes/auth.js');
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
 const baseDir = 'dist';
 
 const app = express()
-	.engine('ejs', require('express-ejs-extend'))
+	.engine('ejs', ejsExtend)
 	.set('views', path.join(__dirname, './views'))
 	.set('view engine', 'ejs')
 	.use(compression())
@@ -20,9 +22,8 @@ const app = express()
 	.use(express.static(baseDir, {
 		maxAge: 31557600000 // one year
 	}))
-	.get('/', (req, res) => {
-		res.render('index');
-	});
+	.use('/', indexRouter)
+	.use('/auth', authRouter);
 
 const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);

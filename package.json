@@ -62,7 +62,9 @@
       "no-unused-vars": 1,
       "no-undef": 1,
       "unicorn/filename-case": 1,
-      "quotes": 1
+      "quotes": 1,
+      "new-cap": 0,
+      "import/no-extraneous-dependencies": 1
     }
   },
   "engines": {
