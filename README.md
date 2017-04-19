@@ -27,4 +27,5 @@ An express server will start running and your files will be watched.
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request
 
-## Wish list
+## Features
+* [ ] Connect with Facebook via oAuth

@@ -5,9 +5,11 @@ const express = require('express');
 const compression = require('compression');
 const staticAsset = require('static-asset');
 
+require('dotenv').config();
+
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
-const baseDir = 'build/client';
+const baseDir = 'dist';
 
 const app = express()
 	.engine('ejs', require('express-ejs-extend'))
