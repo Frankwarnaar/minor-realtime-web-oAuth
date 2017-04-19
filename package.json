@@ -47,6 +47,8 @@
     "dotenv": "^4.0.0",
     "ejs": "^2.5.6",
     "express-ejs-extend": "0.0.1",
+    "node.fetch": "^1.0.0",
+    "request": "^2.81.0",
     "static-asset": "^0.6.0"
   },
   "xo": {
@@ -64,7 +66,8 @@
       "unicorn/filename-case": 1,
       "quotes": 1,
       "new-cap": 0,
-      "import/no-extraneous-dependencies": 1
+      "import/no-extraneous-dependencies": 1,
+      "camelcase": 1
     }
   },
   "engines": {
