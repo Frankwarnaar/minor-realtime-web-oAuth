@@ -1,0 +1,30 @@
+$break-xs: 0;
+$break-sm: 576px;
+$break-md: 768px;
+$break-lg: 992px;
+$break-xl: 1200px;
+
+$break-xs-min: ($break-xs + 1);
+$break-sm-min: ($break-sm + 1);
+$break-md-min: ($break-md + 1);
+$break-lg-min: ($break-lg + 1);
+$break-xl-min: ($break-xl + 1);
+
+$q-xs-min: "screen and (min-width: #{$break-md-min})";
+$q-xs-max: "screen and (max-width: #{$break-sm})";
+$q-xs:     $q-xs-max;
+
+$q-sm-min: "screen and (min-width: #{$break-sm-min})";
+$q-sm-max: "screen and (max-width: #{$break-md})";
+$q-sm:     "screen and (min-width: #{$break-sm}) and (max-width: #{$break-md})";
+
+$q-md-min: "screen and (min-width: #{$break-md-min})";
+$q-md-max: "screen and (max-width: #{$break-lg})";
+$q-md:     "screen and (min-width: #{$break-md}) and (max-width: #{$break-lg})";
+
+$q-lg-min: "screen and (min-width: #{$break-lg-min})";
+$q-lg-max: "screen and (max-width: #{$break-xl})";
+$q-lg:     "screen and (min-width: #{$break-lg}) and (max-width: #{$break-xl})";
+
+$q-xl-min: "screen and (min-width: #{$break-xl-min})";
+$q-xl:     $q-xl-min;

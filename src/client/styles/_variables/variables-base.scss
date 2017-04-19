@@ -1,0 +1,17 @@
+$transition-mode: ease-in-out;
+
+$transition-slowest: 1s $transition-mode;
+$transition-slower:  .7s $transition-mode;
+$transition-slow:    .5s $transition-mode;
+$transition-medium:  .4s $transition-mode;
+$transition-fast:    .3s $transition-mode;
+$transition-faster:  .2s $transition-mode;
+$transition-fastest: .1s $transition-mode;
+
+$spacing-xs:   .325rem;
+$spacing-sm:   .5rem;
+$spacing-md:   .825rem;
+$spacing-lg:   1rem;
+$spacing-xl:   2rem;
+$spacing-xxl:  4rem;
+$spacing-xxxl: 8rem;

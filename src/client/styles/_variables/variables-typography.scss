@@ -1,0 +1,59 @@
+/* ==================================================
+	Font familes
+   ================================================== */
+$font-primary:   'Open sans', sans-serif;
+$font-secondary: $font-primary;
+
+/* ==================================================
+	Font weights
+   ================================================== */
+
+$font-weight-bold:       700;
+$font-weight-semibold:   600;
+$font-weight-medium:     500;
+$font-weight-regular:    400;
+$font-weight-light:      300;
+$font-weight-thin:       200;
+$font-weight-ultralight: 100;
+
+/* ==================================================
+	Font sizes
+   ================================================== */
+
+$font-scale-sm: 1.08;
+$font-scale-md: 1.1;
+$font-scale-lg: 1.16;
+
+$font-size-base-sm: 1em;
+$font-size-base-md: 1.1em;
+$font-size-base-lg: 1.1em;
+
+$font-size-xxxs-sm: calc(#{$font-size-base-sm} / (#{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-xxs-sm:  calc(#{$font-size-base-sm} / (#{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-xs-sm:   calc(#{$font-size-base-sm} / (#{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-sm-sm:   calc(#{$font-size-base-sm} / (#{$font-scale-sm}));
+$font-size-md-sm:   calc(#{$font-size-base-sm} * (#{$font-scale-sm}));
+$font-size-lg-sm:   calc(#{$font-size-base-sm} * (#{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-xl-sm:   calc(#{$font-size-base-sm} * (#{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-xxl-sm:  calc(#{$font-size-base-sm} * (#{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm}));
+$font-size-xxxl-sm: calc(#{$font-size-base-sm} * (#{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm} * #{$font-scale-sm}));
+
+$font-size-xxxs-md: calc(#{$font-size-base-md} / (#{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md}));
+$font-size-xxs-md:  calc(#{$font-size-base-md} / (#{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md}));
+$font-size-xs-md:   calc(#{$font-size-base-md} / (#{$font-scale-md} * #{$font-scale-md}));
+$font-size-sm-md:   calc(#{$font-size-base-md} / (#{$font-scale-md}));
+$font-size-md-md:   calc(#{$font-size-base-md} * (#{$font-scale-md}));
+$font-size-lg-md:   calc(#{$font-size-base-md} * (#{$font-scale-md} * #{$font-scale-md}));
+$font-size-xl-md:   calc(#{$font-size-base-md} * (#{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md}));
+$font-size-xxl-md:  calc(#{$font-size-base-md} * (#{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md}));
+$font-size-xxxl-md: calc(#{$font-size-base-md} * (#{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md} * #{$font-scale-md}));
+
+$font-size-xxxs-lg: calc(#{$font-size-base-lg} / (#{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-xxs-lg:  calc(#{$font-size-base-lg} / (#{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-xs-lg:   calc(#{$font-size-base-lg} / (#{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-sm-lg:   calc(#{$font-size-base-lg} / (#{$font-scale-lg}));
+$font-size-md-lg:   calc(#{$font-size-base-lg} * (#{$font-scale-lg}));
+$font-size-lg-lg:   calc(#{$font-size-base-lg} * (#{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-xl-lg:   calc(#{$font-size-base-lg} * (#{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-xxl-lg:  calc(#{$font-size-base-lg} * (#{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg}));
+$font-size-xxxl-lg: calc(#{$font-size-base-lg} * (#{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg} * #{$font-scale-lg}));

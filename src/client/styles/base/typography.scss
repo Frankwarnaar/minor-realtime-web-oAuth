@@ -1,0 +1,106 @@
+/* ==================================================
+	Font familes
+   ================================================== */
+
+.font-primary {
+	font-family: $font-primary;
+}
+
+.font-secondary {
+	font-family: $font-secondary;
+}
+
+/* ==================================================
+	Font weights
+   ================================================== */
+
+.font-weight-bold {font-weight: $font-weight-bold; }
+.font-weight-semibold {font-weight: $font-weight-semibold; }
+.font-weight-medium {font-weight: $font-weight-medium; }
+.font-weight-regular {font-weight: $font-weight-regular; }
+.font-weight-light {font-weight: $font-weight-light; }
+.font-weight-thin {font-weight: $font-weight-thin; }
+.font-weight-ultralight {font-weight: $font-weight-ultralight; }
+
+
+/* ==================================================
+	Font sizes
+   ================================================== */
+
+.font-size-xxxs { font-size: $font-size-xxxs-sm; }
+.font-size-xxs { font-size: $font-size-xxs-sm; }
+.font-size-xs { font-size: $font-size-xs-sm; }
+.font-size-sm { font-size: $font-size-sm-sm; }
+.font-size-base { font-size: $font-size-base-sm; }
+.font-size-md { font-size: $font-size-md-sm; }
+.font-size-lg { font-size: $font-size-lg-sm; }
+.font-size-xl { font-size: $font-size-xl-sm; }
+.font-size-xxl { font-size: $font-size-xxl-sm; }
+.font-size-xxxl { font-size: $font-size-xxxl-sm; }
+
+@media #{$q-md-min} {
+	.font-size-xxxs { font-size: $font-size-xxxs-md; }
+	.font-size-xxs { font-size: $font-size-xxs-md; }
+	.font-size-xs { font-size: $font-size-xs-md; }
+	.font-size-sm { font-size: $font-size-sm-md; }
+	.font-size-base { font-size: $font-size-base-md; }
+	.font-size-md { font-size: $font-size-md-md; }
+	.font-size-lg { font-size: $font-size-lg-md; }
+	.font-size-xl { font-size: $font-size-xl-md; }
+	.font-size-xxl { font-size: $font-size-xxl-md; }
+	.font-size-xxxl { font-size: $font-size-xxxl-md; }
+ }
+
+@media #{$q-lg-min} {
+	.font-size-xxxs { font-size: $font-size-xxxs-lg; }
+	.font-size-xxs { font-size: $font-size-xxs-lg; }
+	.font-size-xs { font-size: $font-size-xs-lg; }
+	.font-size-sm { font-size: $font-size-sm-lg; }
+	.font-size-base { font-size: $font-size-base-lg; }
+	.font-size-md { font-size: $font-size-md-lg; }
+	.font-size-lg { font-size: $font-size-lg-lg; }
+	.font-size-xl { font-size: $font-size-xl-lg; }
+	.font-size-xxl { font-size: $font-size-xxl-lg; }
+	.font-size-xxxl { font-size: $font-size-xxxl-lg; }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@extend .font-secondary;
+	@extend .font-weight-regular;
+	margin: .8em 0;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+}
+
+h1 {
+	@extend .font-size-xxxl;
+}
+
+h2 {
+	@extend .font-size-xxl;
+}
+
+h3 {
+	@extend .font-size-xl;
+}
+
+h4 {
+	@extend .font-size-lg;
+}
+
+h5 {
+	@extend .font-size-md;
+}
+
+h6 {
+	@extend .font-size-sm;
+}
+
+p {
+	line-height: 150%;
+}

@@ -1,0 +1,34 @@
+$color-lightest:             #fff;
+$color-lightest-transparent: rgba(255,255,255,.4);
+$color-darkest:              #333;
+
+$color-gray-clouds:     #ecf0f1;
+$color-gray-concrete:   #95a5a5;
+$color-gray-mineshaft:	#7e8c8d;
+$color-gray-midnight:   #41484e;
+$color-gray-wetasphalt: #34495e;
+
+$color-primary:            #38735e;
+$color-primary-lightest:   lighten($color-primary, 20%);
+$color-primary-lighter:    lighten($color-primary, 10%);
+$color-primary-darker:     darken($color-primary, 5%);
+$color-primary-darkest:    darken($color-primary, 8%);
+
+$color-secondary:            #8cb6be;
+$color-secondary-lightest:   lighten($color-secondary, 20%);
+$color-secondary-lighter:    lighten($color-secondary, 10%);
+$color-secondary-darker:     darken($color-secondary, 10%);
+$color-secondary-darkest:    darken($color-secondary, 20%);
+
+$color-highlight-success:          #00f787;
+$color-highlight-success-lighter:  lighten($color-highlight-success, 32%);
+$color-highlight-success-lightest: lighten($color-highlight-success, 42%);
+$color-highlight-warning:          $color-primary;
+$color-highlight-warning-lighter:  lighten($color-highlight-warning, 32%);
+$color-highlight-warning-lightest: lighten($color-highlight-warning, 42%);
+$color-highlight-info:             $color-secondary;
+$color-highlight-info-lighter:     lighten($color-highlight-info, 32%);
+$color-highlight-info-lightest:    lighten($color-highlight-info, 42%);
+$color-highlight-error:            #f70039;
+$color-highlight-error-lighter:    lighten($color-highlight-error, 32%);
+$color-highlight-error-lightest:   lighten($color-highlight-error, 42%);

@@ -1,0 +1,17 @@
+html {
+	width: 100%;
+	min-height: 100%;
+}
+
+body {
+	@extend .font-primary;
+	width: 100%;
+	min-height: 100%;
+	background: $color-gray-clouds;
+	color: $color-darkest;
+}
+
+main {
+	margin: 0 auto;
+	max-width: 30em
+}
