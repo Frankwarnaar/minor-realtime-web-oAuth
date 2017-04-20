@@ -13,24 +13,38 @@ function getHandshake(req, res) {
 }
 
 function getToken(req, res) {
-	const options = {
-		url: `${cfg.github.oAuthUrl}/access_token?client_id=${cfg.github.clientId}&client_secret=${cfg.github.secret}&code=${req.query.code}&redirect_uri=${cfg.app.baseUrl}/auth/token`
-	};
-	request('post', options).then(body => {
-		const token = getParams(body).access_token;
+	function generateOptions(url, token) {
 		const options = {
-			url: `${cfg.github.apiUrl}/user`,
+			url,
 			headers: {
-				'User-Agent': cfg.app.name,
-				Authorization: `token ${token}`
+				'User-Agent': cfg.app.name
 			}
 		};
-		request('get', options).then(results => {
-			results = JSON.parse(results);
-			res.render('authenticated/index', {
-				token,
-				username: results.login
+
+		if (token) {
+			options.headers.Authorization = `token ${token}`;
+		}
+
+		return options;
+	}
+
+	request('post', generateOptions(`${cfg.github.oAuthUrl}/access_token?client_id=${cfg.github.clientId}&client_secret=${cfg.github.secret}&code=${req.query.code}&redirect_uri=${cfg.app.baseUrl}/auth/token`)).then(body => {
+		const token = getParams(body).access_token;
+		request('get', generateOptions(`${cfg.github.apiUrl}/user`, token)).then(user => {
+			user = JSON.parse(user);
+			const login = user.login;
+			const options = generateOptions(`${cfg.github.apiUrl}/users/${login}/repos`, token);
+			console.log(options);
+			request('get', options).then(repos => {
+				repos = JSON.parse(repos);
+				console.log(repos);
+				res.render('authenticated/index', {
+					token,
+					username: login
+				});
 			});
+		}).catch(err => {
+			console.log(err);
 		});
 	});
 }
