@@ -1,8 +1,8 @@
 const request = require('request');
 
-function makeRequest(method, url) {
+function makeRequest(method, options) {
 	return new Promise((resolve, reject) => {
-		request[method](url, (err, res, body) => {
+		request[method](options, (err, res, body) => {
 			if (err) {
 				reject(err);
 			} else {
