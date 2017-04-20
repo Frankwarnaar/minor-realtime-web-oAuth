@@ -5,6 +5,7 @@ const express = require('express');
 const compression = require('compression');
 const staticAsset = require('static-asset');
 const ejsExtend = require('express-ejs-extend');
+const io = require('socket.io');
 
 const indexRouter = require('./routes/index.js');
 const authRouter = require('./routes/auth.js');
@@ -23,13 +24,14 @@ const app = express()
 		maxAge: 31557600000 // one year
 	}))
 	.use('/', indexRouter)
-	.use('/auth', authRouter);
+	.use('/auth', authRouter)
+	.use(socketMiddleware);
 
 const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);
 });
 
-require('socket.io')(server)
+const socket = io(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
 
@@ -41,3 +43,8 @@ require('socket.io')(server)
 			console.log(`${socket.id} disconnected`);
 		});
 	});
+
+function socketMiddleware(req, res, next) {
+	req.socket = socket;
+	next();
+}
