@@ -3,7 +3,7 @@ require('dotenv').config();
 module.exports = {
 	app: {
 		name: 'rwt-oAuth',
-		baseUrl: 'http://localhost:3000'
+		baseUrl: process.env.APP_BASEURL
 	},
 	github: {
 		oAuthUrl: 'https://github.com/login/oauth',
