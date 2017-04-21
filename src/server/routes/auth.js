@@ -1,6 +1,5 @@
 const express = require('express');
 
-const request = require('./../lib/request.js');
 const cfg = require('./../../cfg.js');
 const github = require('./../lib/github.js');
 
@@ -24,18 +23,5 @@ function completeAuth(req, res) {
 	});
 	});
 }
-
-// getRepos(user, token)
-// .then(repos => {
-// 	getCommits(repos, token)
-// 	.then(commits => {
-// 		console.log(commits);
-// 		res.render('authenticated/index', {
-// 			token,
-// 			user,
-// 			commits
-// 		});
-// 	});
-// });
 
 module.exports = router;

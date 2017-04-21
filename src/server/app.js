@@ -5,10 +5,11 @@ const express = require('express');
 const compression = require('compression');
 const staticAsset = require('static-asset');
 const ejsExtend = require('express-ejs-extend');
-const io = require('socket.io');
+const socketIo = require('socket.io');
 
 const indexRouter = require('./routes/index.js');
 const authRouter = require('./routes/auth.js');
+const github = require('./lib/github.js');
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
@@ -24,8 +25,7 @@ const app = express()
 		maxAge: 31557600000 // one year
 	}))
 	.use('/', indexRouter)
-	.use('/auth', authRouter)
-	.use(socketMiddleware);
+	.use('/auth', authRouter);
 
 const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);
@@ -33,28 +33,56 @@ const server = app.listen(port, host, err => {
 
 const users = [];
 
-const socketServer = io(server)
+const io = socketIo(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
 
-		socket.on('user', user => {
+		socket.on('setUser', user => {
 			socket.user = user;
-			user.active = true;
-			users.push(user);
-			console.log(users);
+			console.log(user);
+			const matchingUser = users.find(user => {
+				return user.login === socket.user.login;
+			});
+			if (matchingUser) {
+				matchingUser.active = true;
+			} else {
+				user.active = true;
+				users.push(user);
+			}
+
+			// github.getRepos(user, user.token)
+			// .then(repos => {
+			// 	github.getCommits(repos, user.token)
+			// 	.then(commits => {
+			// 		// users.forEach(user => {
+			// 		// 	if (user)
+			// 		// });
+			// 		// console.log(commits);
+			// 		// res.render('authenticated/index', {
+			// 		// 	token,
+			// 		// 	user,
+			// 		// 	commits
+			// 		// });
+			// 	});
+			// });
+			io.emit('userRegistration', getPublicUsers());
 		});
 
 		socket.on('disconnect', () => {
-			users.forEach(user => {
-				if (user.login === socket.user.login) {
-					user.active = false;
-				}
-			});
+			users.find(user => {
+				return user.login === socket.user.login;
+			}).active = false;
+			io.emit('userRegistration', getPublicUsers());
 			console.log(`${socket.id} disconnected`);
 		});
 	});
 
-function socketMiddleware(req, res, next) {
-	req.socket = socketServer;
-	next();
+function getPublicUsers() {
+	return users.map(user => {
+		return {
+			name: user.name,
+			login: user.login,
+			active: user.active
+		};
+	});
 }
