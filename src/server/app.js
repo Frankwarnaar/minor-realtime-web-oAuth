@@ -80,7 +80,7 @@ function updateCommitsCount() {
 	});
 	if (users.find(user => {
 		return user.active;
-	}).lenth > 0) {
+	})) {
 		Promise.all(promises)
 		.then(() => {
 			emitUsers();
