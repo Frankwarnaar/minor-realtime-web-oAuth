@@ -94,6 +94,7 @@ function emitUsers() {
 	users = users.sort((a, b) => {
 		return b.commits - a.commits;
 	});
+	
 	io.emit('userRegistration', getPublicUsers());
 }
 
