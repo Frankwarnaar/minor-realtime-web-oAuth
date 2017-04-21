@@ -1,0 +1,17 @@
+table {
+	th,
+	td {
+		padding: .5rem;
+		text-align: left;
+		border: none;
+	}
+
+	tbody {
+		tr:nth-child(2n - 1) {
+			background: $color-lightest;
+			background: $color-lightest-transparent;
+
+			td {}
+		}
+	}
+}
