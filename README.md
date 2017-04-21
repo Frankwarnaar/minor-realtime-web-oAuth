@@ -31,4 +31,9 @@ An express server will start running and your files will be watched.
 5. Submit a pull request
 
 ## Features
-* [ ] Connect with Facebook via oAuth
+* [x] Connect with github via oAuth
+* [x] Receive commits from a user with the github api
+* [x] Create a ranking of the number of commits of the users that logged in once
+* [ ] Show online users
+* [ ] Update ranking once in a while
+* [ ] Enter someone in the results with a search bar
