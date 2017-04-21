@@ -47,18 +47,7 @@ const io = socketIo(server)
 				user.active = true;
 				users.push(user);
 			}
-
-			github.getRepos(user, user.token)
-			.then(repos => {
-				github.getCommits(repos, user.token)
-				.then(commits => {
-					matchingUser.commits = Array.prototype.concat(...commits).length;
-					emitUsers();
-				});
-			})
-			.catch(err => {
-				console.log(err);
-			});
+			updateCommitsCount();
 		});
 
 		socket.on('disconnect', () => {
@@ -73,6 +62,28 @@ const io = socketIo(server)
 		});
 	});
 
+setInterval(updateCommitsCount, 10000);
+
+function updateCommitsCount() {
+	const promises = users.map(user => {
+		return github.getRepos(user, user.token)
+		.then(repos => {
+			github.getCommits(repos, user.token)
+			.then(commits => {
+				user.commits = Array.prototype.concat(...commits).length;
+				emitUsers();
+			});
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	});
+	Promise.all(promises)
+		.then(() => {
+			emitUsers();
+		});
+}
+
 function findMatchingUser(login) {
 	return users.find(user => {
 		return user.login === login;
@@ -83,7 +94,6 @@ function emitUsers() {
 	users = users.sort((a, b) => {
 		return b.commits - a.commits;
 	});
-	console.log(users);
 	io.emit('userRegistration', getPublicUsers());
 }
 
