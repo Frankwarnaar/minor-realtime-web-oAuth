@@ -2,6 +2,9 @@
 
 In this repo, you can find my work for the course `realtime web` for my minor `everything-web` at the HvA Amsterdam. This repo only contains the code for the classes in which we learned working with `oAuth`.
 
+## Demo
+[Demo here](https://github-ranking.herokuapp.com/)
+
 ## Installation
 
 ```
