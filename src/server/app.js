@@ -70,7 +70,13 @@ function updateCommitsCount() {
 		.then(repos => {
 			github.getCommits(repos, user.token)
 			.then(commits => {
-				user.commits = Array.prototype.concat(...commits).length;
+				commits = Array.prototype.concat(...commits);
+				commits = commits.filter(commit => {
+					const currentDate =  new Date();
+					const dateLimit = currentDate.setDate(currentDate.getDate() - 7);
+					return new Date(commit.commit.author.date) > dateLimit;
+				});
+				user.commits = commits.length;
 				emitUsers();
 			});
 		})
