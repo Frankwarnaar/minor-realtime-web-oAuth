@@ -33,14 +33,18 @@ const server = app.listen(port, host, err => {
 
 const socket = io(server)
 	.on('connection', socket => {
-		// console.log(`Client ${socket.id} connected`);
+		console.log(`Client ${socket.id} connected`);
 
-		socket.on('message', message => {
-			io.sockets.emit('message', message);
+		socket.on('username', username => {
+			socket.username = username;
+		});
+
+		socket.on('token', token => {
+			socket.token = token;
 		});
 
 		socket.on('disconnect', () => {
-			// console.log(`${socket.id} disconnected`);
+			console.log(`${socket.id} disconnected`);
 		});
 	});
 

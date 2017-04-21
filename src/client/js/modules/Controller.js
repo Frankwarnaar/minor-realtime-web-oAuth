@@ -5,48 +5,18 @@ class Controller {
 
 	init() {
 		this.socket();
-		this.getNickname();
 		this.bindEvents();
 	}
 
 	socket() {
+		const username = document.querySelector('[data-user]').getAttribute('[data-user]');
+		const token = document.querySelector('[data-token]').getAttribute('[data-token]');
 		this.app.socket = io();
-	}
+		this.app.socket.username = username;
+		this.app.socket.token = token;
 
-	getNickname() {
-		if (localStorage.getItem('username')) {
-			this.app.username = localStorage.getItem('username');
-			this.app.view.showEl(this.app.$.usernameForm, false);
-			this.app.view.showEl(this.app.$.chatsSection, true);
-		}
-	}
-
-	bindEvents() {
-		this.app.$.usernameForm.addEventListener('submit', this.onNicknameSubmit.bind(this));
-		this.app.$.chatForm.addEventListener('submit', this.emitMessage.bind(this));
-		this.app.socket.on('message', this.app.view.renderMessage.bind(this));
-	}
-
-	onNicknameSubmit(e) {
-		e.preventDefault();
-		const username = this.app.$.usernameInput.value;
-		this.app.username = username;
-		localStorage.setItem('username', username);
-		this.app.view.showEl(this.app.$.usernameForm, false);
-		this.app.view.showEl(this.app.$.chatsSection, true);
-		document.cookie = `username= ${username}`;
-	}
-
-	emitMessage(e) {
-		const socket = this.app.socket;
-		const message = {
-			sender: this.app.username,
-			message: this.app.$.chatFormInput.value,
-			timestamp: Date.now()
-		};
-		socket.emit('message', message);
-		this.app.$.chatFormInput.value = '';
-		e.preventDefault();
+		this.app.socket.emit('username', username);
+		this.app.socket.emit('token', token);
 	}
 }
 
