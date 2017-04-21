@@ -1,7 +1,7 @@
 <% extend("../_base/layout") %>
 
 <main>
-	<h1>Registered to <%= user.login %></h1>
+	<h1>Welcome <%= user.name %></h1>
 	<input data-token="<%= token %>" type="hidden" value="<%= token %>">
 	<input data-user="<%= user.login %>" type="hidden" value="<%= user.login %>">
 </main>

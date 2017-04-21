@@ -31,24 +31,30 @@ const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);
 });
 
-const socket = io(server)
+const users = [];
+
+const socketServer = io(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
 
-		socket.on('username', username => {
-			socket.username = username;
-		});
-
-		socket.on('token', token => {
-			socket.token = token;
+		socket.on('user', user => {
+			socket.user = user;
+			user.active = true;
+			users.push(user);
+			console.log(users);
 		});
 
 		socket.on('disconnect', () => {
+			users.forEach(user => {
+				if (user.login === socket.user.login) {
+					user.active = false;
+				}
+			});
 			console.log(`${socket.id} disconnected`);
 		});
 	});
 
 function socketMiddleware(req, res, next) {
-	req.socket = socket;
+	req.socket = socketServer;
 	next();
 }
