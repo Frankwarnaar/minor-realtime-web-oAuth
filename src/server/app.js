@@ -31,7 +31,7 @@ const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);
 });
 
-const users = [];
+let users = [];
 
 const io = socketIo(server)
 	.on('connection', socket => {
@@ -39,12 +39,11 @@ const io = socketIo(server)
 
 		socket.on('setUser', user => {
 			socket.user = user;
-			const matchingUser = users.find(user => {
-				return user.login === socket.user.login;
-			});
+			let matchingUser = findMatchingUser(user.login);
 			if (matchingUser) {
 				matchingUser.active = true;
 			} else {
+				matchingUser = user;
 				user.active = true;
 				users.push(user);
 			}
@@ -53,11 +52,8 @@ const io = socketIo(server)
 			.then(repos => {
 				github.getCommits(repos, user.token)
 				.then(commits => {
-					commits = Array.prototype.concat(...commits);
-					users.forEach(user => {
-						user.commits = commits.length;
-					});
-					io.emit('userRegistration', getPublicUsers());
+					matchingUser.commits = Array.prototype.concat(...commits).length;
+					emitUsers();
 				});
 			})
 			.catch(err => {
@@ -66,16 +62,30 @@ const io = socketIo(server)
 		});
 
 		socket.on('disconnect', () => {
-			const matchingUser =  users.find(user => {
-				return user.login === socket.user.login;
-			});
-			if (matchingUser) {
-				matchingUser.active = false;
+			if (socket.user) {
+				const matchingUser =  findMatchingUser(socket.user.login);
+				if (matchingUser) {
+					matchingUser.active = false;
+					emitUsers();
+				}
 			}
-			io.emit('userRegistration', getPublicUsers());
 			console.log(`${socket.id} disconnected`);
 		});
 	});
+
+function findMatchingUser(login) {
+	return users.find(user => {
+		return user.login === login;
+	});
+}
+
+function emitUsers() {
+	users = users.sort((a, b) => {
+		return b.commits - a.commits;
+	});
+	console.log(users);
+	io.emit('userRegistration', getPublicUsers());
+}
 
 function getPublicUsers() {
 	return users.map(user => {

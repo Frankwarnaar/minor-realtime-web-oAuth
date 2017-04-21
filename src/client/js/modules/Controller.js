@@ -23,7 +23,7 @@ class Controller {
 
 		this.app.socket
 			.on('userRegistration', users => {
-				console.log(users);
+				this.app.view.renderUsers(users);
 			});
 	}
 }
