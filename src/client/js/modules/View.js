@@ -4,7 +4,6 @@ class View {
 	}
 
 	renderUsers(users) {
-		console.log(users);
 		const $tableBody = document.querySelector('#ranking tbody');
 
 		let content = '';

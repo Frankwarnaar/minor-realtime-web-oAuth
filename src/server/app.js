@@ -88,6 +88,9 @@ function emitUsers() {
 }
 
 function getPublicUsers() {
+	users = users.filter(user => {
+		return user.name.length > 0;
+	});
 	return users.map(user => {
 		return {
 			name: user.name,
