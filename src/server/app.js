@@ -78,10 +78,14 @@ function updateCommitsCount() {
 			console.log(err);
 		});
 	});
-	Promise.all(promises)
+	if (users.find(user => {
+		return user.active;
+	}).lenth > 0) {
+		Promise.all(promises)
 		.then(() => {
 			emitUsers();
 		});
+	}
 }
 
 function findMatchingUser(login) {
@@ -94,7 +98,6 @@ function emitUsers() {
 	users = users.sort((a, b) => {
 		return b.commits - a.commits;
 	});
-	
 	io.emit('userRegistration', getPublicUsers());
 }
 
