@@ -39,7 +39,6 @@ const io = socketIo(server)
 
 		socket.on('setUser', user => {
 			socket.user = user;
-			console.log(user);
 			const matchingUser = users.find(user => {
 				return user.login === socket.user.login;
 			});
@@ -50,28 +49,29 @@ const io = socketIo(server)
 				users.push(user);
 			}
 
-			// github.getRepos(user, user.token)
-			// .then(repos => {
-			// 	github.getCommits(repos, user.token)
-			// 	.then(commits => {
-			// 		// users.forEach(user => {
-			// 		// 	if (user)
-			// 		// });
-			// 		// console.log(commits);
-			// 		// res.render('authenticated/index', {
-			// 		// 	token,
-			// 		// 	user,
-			// 		// 	commits
-			// 		// });
-			// 	});
-			// });
-			io.emit('userRegistration', getPublicUsers());
+			github.getRepos(user, user.token)
+			.then(repos => {
+				github.getCommits(repos, user.token)
+				.then(commits => {
+					commits = Array.prototype.concat(...commits);
+					users.forEach(user => {
+						user.commits = commits.length;
+					});
+					io.emit('userRegistration', getPublicUsers());
+				});
+			})
+			.catch(err => {
+				console.log(err);
+			});
 		});
 
 		socket.on('disconnect', () => {
-			users.find(user => {
+			const matchingUser =  users.find(user => {
 				return user.login === socket.user.login;
-			}).active = false;
+			});
+			if (matchingUser) {
+				matchingUser.active = false;
+			}
 			io.emit('userRegistration', getPublicUsers());
 			console.log(`${socket.id} disconnected`);
 		});
@@ -82,7 +82,8 @@ function getPublicUsers() {
 		return {
 			name: user.name,
 			login: user.login,
-			active: user.active
+			active: user.active,
+			commits: user.commits
 		};
 	});
 }
