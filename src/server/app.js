@@ -40,6 +40,7 @@ const io = socketIo(server)
 
 		socket.on('publishUser', user => {
 			socket.user = user;
+			socket.user.option = 'currentWeek';
 			let matchingUser = findMatchingUser(user.login);
 			if (matchingUser) {
 				matchingUser.active = true;
@@ -48,23 +49,40 @@ const io = socketIo(server)
 				user.active = true;
 				users.push(user);
 			}
+			sockets.push(socket);
 			updateCommitsCount();
-			emitUsers('currentWeek');
+			emitUsers();
 		});
 
 		socket.on('registerUsers', option => {
-			socket.user.option = option;
-			emitUsersSingle(socket);
+			if (socket.user) {
+				socket.user.option = option;
+			} else {
+				socket.user = {
+					option
+				};
+			}
+			const currentSocket = sockets.find(single => {
+				return socket.id === single.id;
+			});
+			currentSocket.option = option;
+			emitUsersToSingle(socket);
 		});
 
 		socket.on('disconnect', () => {
 			if (socket.user) {
-				const matchingUser =	findMatchingUser(socket.user.login);
+				const matchingUser = findMatchingUser(socket.user.login);
 				if (matchingUser) {
 					matchingUser.active = false;
-					emitUsers('currentWeek');
+					emitUsers();
 				}
 			}
+			const socketIndex = sockets.map((single, i) => {
+				if (socket.id === single.id) {
+					return i;
+				}
+			});
+			sockets.splice(socketIndex, 1);
 			console.log(`${socket.id} disconnected`);
 		});
 	});
@@ -107,7 +125,7 @@ function updateCommitsCount() {
 					}
 				});
 				user.scores = scores;
-				emitUsers('currentWeek');
+				emitUsers();
 			});
 		})
 		.catch(err => {
@@ -119,7 +137,7 @@ function updateCommitsCount() {
 	})) {
 		Promise.all(promises)
 		.then(() => {
-			emitUsers('currentWeek');
+			emitUsers();
 		});
 	}
 }
@@ -130,11 +148,13 @@ function findMatchingUser(login) {
 	});
 }
 
-function emitUsers(option) {
-	io.emit('publishUsers', getPublicUsers(option));
+function emitUsers() {
+	sockets.forEach(socket => {
+		emitUsersToSingle(socket);
+	});
 }
 
-function emitUsersSingle(socket) {
+function emitUsersToSingle(socket) {
 	const users = getPublicUsers(socket.user.option);
 	socket.emit('publishUsers', users);
 }
@@ -144,7 +164,6 @@ function getPublicUsers(option) {
 		return user.name.length > 0;
 	});
 	return users.map(user => {
-		console.log(user.scores, option);
 		return {
 			name: user.name,
 			login: user.login,
