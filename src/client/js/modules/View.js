@@ -19,7 +19,7 @@ class View {
 				<tr>
 					<td>${i + 1}</td>
 					<td>${user.name}</td>
-					<td>${user.scores[option]}</td>
+					<td>${user.scores ? user.scores[option] : 0}</td>
 				</tr>`;
 		});
 

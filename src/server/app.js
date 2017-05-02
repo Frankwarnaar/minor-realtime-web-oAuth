@@ -63,7 +63,7 @@ const io = socketIo(server)
 		});
 	});
 
-setInterval(updateCommitsCount, 10000);
+// setInterval(updateCommitsCount, 10000);
 
 function updateCommitsCount() {
 	const promises = users.map(user => {
