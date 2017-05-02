@@ -5,6 +5,14 @@
 	<input data-token="<%= token %>" type="hidden" value="<%= token %>">
 	<input data-login="<%= user.login %>" type="hidden" value="<%= user.login %>">
 	<input data-user="<%= user.name %>" type="hidden" value="<%= user.name %>">
+	<label>
+		Week:
+		<select id="render-option" name="render-option">
+			<option selected value="currentWeek">This week</option>
+			<option value="lastWeek">Last week</option>
+			<option value="twoWeeksAgo">Two weeks ago</option>
+		</select>
+	</label>
 
 	<h2>Top commiters last 7 days</h2>
 	<table id="ranking" cellspacing="0">

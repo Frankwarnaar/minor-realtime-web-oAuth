@@ -5,6 +5,13 @@ class Controller {
 
 	init() {
 		this.socket();
+		this.bindEvents();
+	}
+
+	bindEvents() {
+		const $option = document.querySelector('#render-option');
+
+		$option.addEventListener('input', this.app.view.renderUsers.bind(this));
 	}
 
 	socket() {
@@ -23,7 +30,8 @@ class Controller {
 
 		this.app.socket
 			.on('userRegistration', users => {
-				this.app.view.renderUsers(users);
+				this.app.users = users;
+				this.app.view.renderUsers();
 			});
 	}
 }

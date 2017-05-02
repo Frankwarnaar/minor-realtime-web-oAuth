@@ -48,6 +48,7 @@ const io = socketIo(server)
 				users.push(user);
 			}
 			updateCommitsCount();
+			emitUsers();
 		});
 
 		socket.on('disconnect', () => {
@@ -71,12 +72,28 @@ function updateCommitsCount() {
 			github.getCommits(repos, user.token)
 			.then(commits => {
 				commits = Array.prototype.concat(...commits);
-				commits = commits.filter(commit => {
-					const currentDate =  new Date();
-					const dateLimit = currentDate.setDate(currentDate.getDate() - 7);
-					return new Date(commit.commit.author.date) > dateLimit;
+				const scores = {
+					currentWeek: 0,
+					lastWeek: 0,
+					twoWeeksAgo: 0
+				};
+				const currentDate =  new Date();
+				const dateLimits = {
+					thisWeek: currentDate.setDate(currentDate.getDate() - 7),
+					lastWeek: currentDate.setDate(currentDate.getDate() - 14),
+					twoWeeksAgo: currentDate.setDate(currentDate.getDate() - 21)
+				};
+
+				commits.forEach(commit => {
+					if (new Date(commit.commit.author.date) > dateLimits.thisWeek) {
+						scores.currentWeek++;
+					} else if (new Date(commit.commit.author.date) < dateLimits.thisWeek && new Date(commit.commit.author.date) > dateLimits.lastWeek) {
+						scores.lastWeek++;
+					} else if (new Date(commit.commit.author.date) < dateLimits.lastWeek && new Date(commit.commit.author.date) > dateLimits.twoWeekAgo) {
+						scores.twoWeeksAgo++;
+					}
 				});
-				user.commits = commits.length;
+				user.scores = scores;
 				emitUsers();
 			});
 		})
@@ -101,9 +118,6 @@ function findMatchingUser(login) {
 }
 
 function emitUsers() {
-	users = users.sort((a, b) => {
-		return b.commits - a.commits;
-	});
 	io.emit('userRegistration', getPublicUsers());
 }
 
@@ -116,7 +130,7 @@ function getPublicUsers() {
 			name: user.name,
 			login: user.login,
 			active: user.active,
-			commits: user.commits
+			scores: user.scores
 		};
 	});
 }
