@@ -9,9 +9,7 @@ class Controller {
 	}
 
 	bindEvents() {
-		const $option = document.querySelector('#render-option');
-
-		$option.addEventListener('input', this.app.view.renderUsers.bind(this));
+		this.app.$option.addEventListener('input', this.app.view.renderUsers.bind(this));
 	}
 
 	socket() {

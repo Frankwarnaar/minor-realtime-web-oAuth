@@ -66,6 +66,11 @@ const io = socketIo(server)
 // setInterval(updateCommitsCount, 10000);
 
 function updateCommitsCount() {
+	const dateLimits = {
+		thisWeek: new Date().setDate(new Date().getDate() - 7),
+		lastWeek: new Date().setDate(new Date().getDate() - 14),
+		twoWeeksAgo: new Date().setDate(new Date().getDate() - 21)
+	};
 	const promises = users.map(user => {
 		return github.getRepos(user, user.token)
 		.then(repos => {
@@ -76,12 +81,6 @@ function updateCommitsCount() {
 					currentWeek: 0,
 					lastWeek: 0,
 					twoWeeksAgo: 0
-				};
-				const currentDate =  new Date();
-				const dateLimits = {
-					thisWeek: currentDate.setDate(currentDate.getDate() - 7),
-					lastWeek: currentDate.setDate(currentDate.getDate() - 14),
-					twoWeeksAgo: currentDate.setDate(currentDate.getDate() - 21)
 				};
 
 				commits.forEach(commit => {

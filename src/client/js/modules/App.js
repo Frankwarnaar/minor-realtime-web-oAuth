@@ -8,7 +8,12 @@ class App {
 	}
 
 	init() {
+		this.bindElements();
 		this.controller.init();
+	}
+
+	bindElements() {
+		this.$option = document.querySelector('#render-option');
 	}
 }
 

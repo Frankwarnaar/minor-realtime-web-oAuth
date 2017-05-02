@@ -5,12 +5,14 @@ class View {
 
 	renderUsers() {
 		const $tableBody = document.querySelector('#ranking tbody');
-		const option = document.querySelector('#render-option').value;
+		const option = this.app.$option.value;
 		let users = this.app.users;
 
-		users = this.app.users.sort((a, b) => {
-			return b.scores[option] - a.scores[option];
-		});
+		if (users.length > 0) {
+			users = this.app.users.sort((a, b) => {
+				return b.scores[option] - a.scores[option];
+			});
+		}
 
 		let content = '';
 		users.forEach((user, i) => {
