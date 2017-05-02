@@ -67,7 +67,8 @@
       "quotes": 1,
       "new-cap": 0,
       "import/no-extraneous-dependencies": 1,
-      "camelcase": 1
+      "camelcase": 1,
+      "no-negated-condition": 0
     }
   },
   "engines": {

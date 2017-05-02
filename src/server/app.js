@@ -32,12 +32,13 @@ const server = app.listen(port, host, err => {
 });
 
 let users = [];
+const sockets = [];
 
 const io = socketIo(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
 
-		socket.on('setUser', user => {
+		socket.on('publishUser', user => {
 			socket.user = user;
 			let matchingUser = findMatchingUser(user.login);
 			if (matchingUser) {
@@ -48,7 +49,12 @@ const io = socketIo(server)
 				users.push(user);
 			}
 			updateCommitsCount();
-			emitUsers();
+			emitUsers('currentWeek');
+		});
+
+		socket.on('registerUsers', option => {
+			socket.user.option = option;
+			emitUsersSingle(socket);
 		});
 
 		socket.on('disconnect', () => {
@@ -56,7 +62,7 @@ const io = socketIo(server)
 				const matchingUser =	findMatchingUser(socket.user.login);
 				if (matchingUser) {
 					matchingUser.active = false;
-					emitUsers();
+					emitUsers('currentWeek');
 				}
 			}
 			console.log(`${socket.id} disconnected`);
@@ -78,7 +84,6 @@ function updateCommitsCount() {
 		lastWeek: getMonday(new Date().setDate(new Date().getDate() - 7)).getTime(),
 		twoWeeksAgo: getMonday(new Date().setDate(new Date().getDate() - 14)).getTime()
 	};
-	console.log(dateLimits);
 	const promises = users.map(user => {
 		return github.getRepos(user, user.token)
 		.then(repos => {
@@ -102,7 +107,7 @@ function updateCommitsCount() {
 					}
 				});
 				user.scores = scores;
-				emitUsers();
+				emitUsers('currentWeek');
 			});
 		})
 		.catch(err => {
@@ -114,7 +119,7 @@ function updateCommitsCount() {
 	})) {
 		Promise.all(promises)
 		.then(() => {
-			emitUsers();
+			emitUsers('currentWeek');
 		});
 	}
 }
@@ -125,20 +130,26 @@ function findMatchingUser(login) {
 	});
 }
 
-function emitUsers() {
-	io.emit('userRegistration', getPublicUsers());
+function emitUsers(option) {
+	io.emit('publishUsers', getPublicUsers(option));
 }
 
-function getPublicUsers() {
+function emitUsersSingle(socket) {
+	const users = getPublicUsers(socket.user.option);
+	socket.emit('publishUsers', users);
+}
+
+function getPublicUsers(option) {
 	users = users.filter(user => {
 		return user.name.length > 0;
 	});
 	return users.map(user => {
+		console.log(user.scores, option);
 		return {
 			name: user.name,
 			login: user.login,
 			active: user.active,
-			scores: user.scores
+			score: user.scores ? user.scores[option] : null
 		};
 	});
 }

@@ -1,0 +1,19 @@
+.loader {
+	width: 2rem;
+	height: 2rem;
+	border: .325rem solid $color-gray-clouds;
+
+	border-top: .325rem solid $color-primary;
+	animation: rotate $transition-slowest infinite;
+	border-radius: 50%;
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}

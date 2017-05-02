@@ -23,7 +23,7 @@ class View {
 				<tr>
 					<td>${i + 1}</td>
 					<td>${user.name}</td>
-					<td>${user.scores ? user.scores[option] : 0}</td>
+					<td>${user.score !== null ? user.score : '<div class="loader"></div>'}</td>
 				</tr>`;
 		});
 
