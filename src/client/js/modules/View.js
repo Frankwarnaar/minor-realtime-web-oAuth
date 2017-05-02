@@ -10,13 +10,15 @@ class View {
 
 		if (users.length > 0) {
 			users = this.app.users.sort((a, b) => {
-				return b.scores[option] - a.scores[option];
+				if (a.scores[option] && b.scores[option]) {
+					return b.scores[option] - a.scores[option];
+				}
+				return 0;
 			});
 		}
 
 		let content = '';
 		users.forEach((user, i) => {
-			console.log(user.scores[option], user.scores, option);
 			content += `
 				<tr>
 					<td>${i + 1}</td>

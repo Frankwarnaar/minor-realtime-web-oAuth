@@ -53,7 +53,7 @@ const io = socketIo(server)
 
 		socket.on('disconnect', () => {
 			if (socket.user) {
-				const matchingUser =  findMatchingUser(socket.user.login);
+				const matchingUser =	findMatchingUser(socket.user.login);
 				if (matchingUser) {
 					matchingUser.active = false;
 					emitUsers();
@@ -65,12 +65,20 @@ const io = socketIo(server)
 
 // setInterval(updateCommitsCount, 10000);
 
+function getMonday(d) {
+	d = new Date(d);
+	const day = d.getDay();
+	const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+	return new Date(d.setDate(diff));
+}
+
 function updateCommitsCount() {
 	const dateLimits = {
-		thisWeek: new Date().setDate(new Date().getDate() - 7),
-		lastWeek: new Date().setDate(new Date().getDate() - 14),
-		twoWeeksAgo: new Date().setDate(new Date().getDate() - 21)
+		currentWeek: getMonday(new Date()).getTime(),
+		lastWeek: getMonday(new Date().setDate(new Date().getDate() - 7)).getTime(),
+		twoWeeksAgo: getMonday(new Date().setDate(new Date().getDate() - 14)).getTime()
 	};
+	console.log(dateLimits);
 	const promises = users.map(user => {
 		return github.getRepos(user, user.token)
 		.then(repos => {
@@ -84,11 +92,12 @@ function updateCommitsCount() {
 				};
 
 				commits.forEach(commit => {
-					if (new Date(commit.commit.author.date) > dateLimits.thisWeek) {
+					const timestamp = new Date(commit.commit.author.date).getTime();
+					if (timestamp > dateLimits.currentWeek) {
 						scores.currentWeek++;
-					} else if (new Date(commit.commit.author.date) < dateLimits.thisWeek && new Date(commit.commit.author.date) > dateLimits.lastWeek) {
+					} else if (timestamp < dateLimits.currentWeek && timestamp > dateLimits.lastWeek) {
 						scores.lastWeek++;
-					} else if (new Date(commit.commit.author.date) < dateLimits.lastWeek && new Date(commit.commit.author.date) > dateLimits.twoWeekAgo) {
+					} else if (timestamp < dateLimits.lastWeek && timestamp > dateLimits.twoWeeksAgo) {
 						scores.twoWeeksAgo++;
 					}
 				});
