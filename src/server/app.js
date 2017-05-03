@@ -55,7 +55,9 @@ const io = socketIo(server)
 
 		function onPublishUser(user) {
 			socket.user = user;
-			socket.user.option = 'currentWeek';
+			if (!socket.user.option) {
+				socket.user.option = 'currentWeek';
+			}
 			let matchingUser = util.findMatchingUser(users, user.login);
 
 			if (matchingUser) {

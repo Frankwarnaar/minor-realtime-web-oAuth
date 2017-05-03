@@ -19,7 +19,6 @@ class Controller {
 		const name = document.querySelector('[data-user]').getAttribute('data-user');
 		const login = document.querySelector('[data-login]').getAttribute('data-login');
 		const token = document.querySelector('[data-token]').getAttribute('data-token');
-		const option = app.$option.value;
 
 		createNewSocket();
 
@@ -28,12 +27,12 @@ class Controller {
 			app.socket.name = name;
 			app.socket.login = login;
 			app.socket.token = token;
-			app.socket.option = option;
+			app.socket.option = app.$option.value;
 			app.socket.emit('publishUser', {
 				name,
 				login,
 				token,
-				option
+				option: app.$option.value
 			});
 		}
 
