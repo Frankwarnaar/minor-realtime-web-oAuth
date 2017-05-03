@@ -115,20 +115,17 @@ const io = socketIo(server)
 		}
 	});
 
-// setInterval(updateCommitsCount, 10000);
-
-function getMonday(d) {
-	d = new Date(d);
-	const day = d.getDay();
-	const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-	return new Date(d.setDate(diff));
-}
+setInterval(() => {
+	if (users.find(user => user.active)) {
+		updateCommitsCount()
+	}
+}, 10000);
 
 function updateCommitsCount() {
 	const dateLimits = {
-		currentWeek: getMonday(new Date()).getTime(),
-		lastWeek: getMonday(new Date().setDate(new Date().getDate() - 7)).getTime(),
-		twoWeeksAgo: getMonday(new Date().setDate(new Date().getDate() - 14)).getTime()
+		currentWeek: util.getMonday(new Date()).getTime(),
+		lastWeek: util.getMonday(new Date().setDate(new Date().getDate() - 7)).getTime(),
+		twoWeeksAgo: util.getMonday(new Date().setDate(new Date().getDate() - 14)).getTime()
 	};
 	const promises = users.map(user => {
 		return github.getRepos(user, user.token)
@@ -148,7 +145,7 @@ function updateCommitsCount() {
 						scores.currentWeek++;
 					} else if (timestamp < dateLimits.currentWeek && timestamp > dateLimits.lastWeek) {
 						scores.lastWeek++;
-					} else if (timestamp < dateLimits.lastWeek && timestamp > dateLimits.twoWeeksAgo) {
+					} else {
 						scores.twoWeeksAgo++;
 					}
 				});

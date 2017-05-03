@@ -46,7 +46,6 @@ module.exports = {
 	getCommits(repos, token) {
 		return new Promise((resolve, reject) => {
 			const dateLimit = util.getMonday(new Date().setDate(new Date().getDate() - 15));
-			console.log(dateLimit);
 			const commitsRequests = repos.map(repo => {
 				const options = this.generateOptions(`${cfg.github.apiUrl}/repos/${repo.full_name}/commits?since=${dateLimit}`, token);
 				return request('get', options);
