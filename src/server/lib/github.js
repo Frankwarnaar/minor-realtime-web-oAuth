@@ -4,6 +4,8 @@ const util = require('./util.js');
 const emit = require('./emit.js');
 const cfg = require('./../../cfg.js');
 
+let sourceOffline = false;
+
 module.exports = {
 	getToken(code) {
 		return new Promise((resolve, reject) => {
@@ -23,10 +25,15 @@ module.exports = {
 			const options = this.generateOptions(`${cfg.github.apiUrl}/user`, token);
 			request('get', options)
 				.then(user => {
+					if (sourceOffline) {
+						emit.sourceOffline(false);
+						sourceOffline = false;
+					}
 					resolve(JSON.parse(user));
 				})
 				.catch(err => {
 					console.log('error in user');
+					sourceOffline = true;
 					emit.sourceOffline(true);
 					reject(err);
 				});
@@ -38,10 +45,15 @@ module.exports = {
 			const options = this.generateOptions(`${cfg.github.apiUrl}/users/${user.login}/repos`, token);
 			request('get', options)
 				.then(repos => {
+					if (sourceOffline) {
+						emit.sourceOffline(false);
+						sourceOffline = false;
+					}
 					resolve(JSON.parse(repos));
 				})
 				.catch(err => {
 					console.log('error in repos');
+					sourceOffline = true;
 					emit.sourceOffline(true);
 					reject(err);
 				});
@@ -66,10 +78,15 @@ module.exports = {
 							};
 						});
 					});
+					if (sourceOffline) {
+						emit.sourceOffline(false);
+						sourceOffline = false;
+					}
 					resolve(commits);
 				})
 				.catch(err => {
 					console.log('err in commits');
+					sourceOffline = true;
 					emit.sourceOffline(true);
 					reject(err);
 				});

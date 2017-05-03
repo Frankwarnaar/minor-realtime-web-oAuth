@@ -1,0 +1,17 @@
+dialog {
+	position: fixed;
+	left: 2rem;
+	bottom: 2rem;
+	right: auto;
+	max-width: 20rem;
+	border: none;
+	box-shadow: 0 0 1rem 0 rgba(0,0,0,4);
+
+	&.success {
+		background: $color-highlight-success-lighter;
+	}
+
+	&.error {
+		background: $color-highlight-error-lighter;
+	}
+}
