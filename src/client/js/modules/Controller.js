@@ -32,10 +32,38 @@ class Controller {
 		});
 
 		this.app.socket
-			.on('publishUsers', users => {
-				this.app.users = users;
-				this.app.view.renderUsers();
-			});
+			.on('connect', onConnect.bind(this))
+			.on('disconnect', onDisconnect.bind(this))
+			.on('publishUsers', onPublishUsers.bind(this));
+
+		function onConnect() {
+			console.log('connected');
+			this.app.connected = true;
+		}
+
+		function onDisconnect() {
+			const app = this.app;
+			app.connected = false;
+
+			let interval = 1000
+			reconnect();
+			function reconnect() {
+				setTimeout(() => {
+					app.socket = io();
+					if (!app.connected) {
+						interval = interval * 2;
+						reconnect();
+					}
+					console.log('reconnecting');
+				}, interval);
+			}
+		}
+
+		function onPublishUsers(users) {
+			this.app.users = users;
+			this.app.view.renderUsers();
+		}
+
 	}
 
 	emitOption() {
