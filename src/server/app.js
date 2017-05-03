@@ -11,6 +11,7 @@ const session = require('express-session');
 const indexRouter = require('./routes/index.js');
 const authRouter = require('./routes/auth.js');
 const github = require('./lib/github.js');
+const util = require('./lib/util.js');
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
@@ -54,7 +55,7 @@ const io = socketIo(server)
 		function onPublishUser(user) {
 			socket.user = user;
 			socket.user.option = 'currentWeek';
-			let matchingUser = findMatchingUser(user.login);
+			let matchingUser = util.findMatchingUser(users, user.login);
 
 			if (matchingUser) {
 				matchingUser.active = true;
@@ -65,7 +66,7 @@ const io = socketIo(server)
 			}
 
 			updateCommitsCount();
-			emit.users();
+			emit.users(users);
 		}
 
 		function onRegisterUsers(option) {
@@ -80,15 +81,15 @@ const io = socketIo(server)
 				return socket.id === single.id;
 			});
 			currentSocket.option = option;
-			emit.usersToSingle(socket);
+			emit.usersToSingle(users, socket);
 		}
 
 		function onDisconnect() {
 			if (socket.user) {
-				const matchingUser = findMatchingUser(socket.user.login);
+				const matchingUser = util.findMatchingUser(users, socket.user.login);
 				if (matchingUser) {
 					matchingUser.active = false;
-					emit.users();
+					emit.users(users);
 				}
 			}
 			const socketIndex = sockets.map((single, i) => {
@@ -139,7 +140,7 @@ function updateCommitsCount() {
 					}
 				});
 				user.scores = scores;
-				emit.users();
+				emit.users(users);
 
 				if (sourceOffline) {
 					emit.sourceOffline(false);
@@ -156,43 +157,23 @@ function updateCommitsCount() {
 	})) {
 		Promise.all(promises)
 		.then(() => {
-			emit.users();
+			emit.users(users);
 		});
 	}
 }
 
 const emit = {
-	users() {
+	users(users) {
 		sockets.forEach(socket => {
-			this.usersToSingle(socket);
+			this.usersToSingle(users, socket);
 		});
 	},
-	usersToSingle(socket) {
-		const users = getPublicUsers(socket.user.option);
-		socket.emit('publishUsers', users);
+	usersToSingle(users, socket) {
+		const publicusers = util.getPublicUsers(users ,socket.user.option);
+		socket.emit('publishUsers', publicusers);
 	},
-	sourceOffline(state) {
-		sourceOffline = state;
+	sourceOffline(offline) {
+		sourceOffline = offline;
 		io.emit('publishSourceState', state);
 	}
-}
-
-function findMatchingUser(login) {
-	return users.find(user => {
-		return user.login === login;
-	});
-}
-
-function getPublicUsers(option) {
-	users = users.filter(user => {
-		return user.name.length > 0;
-	});
-	return users.map(user => {
-		return {
-			name: user.name,
-			login: user.login,
-			active: user.active,
-			score: user.scores ? user.scores[option] : null
-		};
-	});
 }
