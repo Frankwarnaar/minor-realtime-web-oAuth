@@ -169,8 +169,8 @@ const emit = {
 		});
 	},
 	usersToSingle(users, socket) {
-		const publicusers = util.getPublicUsers(users ,socket.user.option);
-		socket.emit('publishUsers', publicusers);
+		const publicUsers = util.getPublicUsers(users, socket.user.option);
+		socket.emit('publishUsers', publicUsers);
 	},
 	sourceOffline(offline) {
 		sourceOffline = offline;

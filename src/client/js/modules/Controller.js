@@ -34,19 +34,28 @@ class Controller {
 		this.app.socket
 			.on('connect', onConnect.bind(this))
 			.on('disconnect', onDisconnect.bind(this))
-			.on('publishUsers', onPublishUsers.bind(this));
+			.on('publishUsers', onPublishUsers.bind(this))
+			.on('publishSourceState', this.app.view.renderSourceState.bind(this));
 
 		function onConnect() {
 			console.log('connected');
 			this.app.connected = true;
+
+			if (this.app.reconnectUnhandled) {
+				this.app.reconnectUnhandled = false
+				this.app.view.renderConnectionStatus(true);
+			}
 		}
 
 		function onDisconnect() {
 			const app = this.app;
 			app.connected = false;
+			app.reconnectUnhandled = true;
+			app.view.renderConnectionStatus(false);
 
 			let interval = 1000
 			reconnect();
+
 			function reconnect() {
 				setTimeout(() => {
 					app.socket = io();
