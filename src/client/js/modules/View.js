@@ -45,8 +45,8 @@ class View {
 		$dialog.className = `source-state ${offline ? 'error' : 'success'}`;
 
 		setTimeout(() => {
-			$dialog.setAttribute('open', false);
-		});
+			$dialog.removeAttribute('open');
+		}, 5000);
 	}
 
 
@@ -65,8 +65,8 @@ class View {
 		$dialog.className = `connection-state ${online ? 'error' : 'success'}`;
 
 		setTimeout(() => {
-			$dialog.setAttribute('open', false);
-		});
+			$dialog.removeAttribute('open');
+		}, 5000);
 	}
 }
 
