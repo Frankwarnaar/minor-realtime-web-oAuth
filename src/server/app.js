@@ -34,11 +34,16 @@ const server = app.listen(port, host, err => {
 let users = [];
 const sockets = [];
 
-const io = socketIo(server)
+socketIo(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
 
-		socket.on('publishUser', user => {
+		socket
+			.on('publishUser', onPublishUser)
+			.on('registerUsers', onRegisterUsers)
+			.on('disconnect', onDisconnect);
+
+		function onPublishUser(user) {
 			socket.user = user;
 			socket.user.option = 'currentWeek';
 			let matchingUser = findMatchingUser(user.login);
@@ -52,9 +57,9 @@ const io = socketIo(server)
 			sockets.push(socket);
 			updateCommitsCount();
 			emitUsers();
-		});
+		}
 
-		socket.on('registerUsers', option => {
+		function onRegisterUsers(option) {
 			if (socket.user) {
 				socket.user.option = option;
 			} else {
@@ -67,9 +72,9 @@ const io = socketIo(server)
 			});
 			currentSocket.option = option;
 			emitUsersToSingle(socket);
-		});
+		}
 
-		socket.on('disconnect', () => {
+		function onDisconnect() {
 			if (socket.user) {
 				const matchingUser = findMatchingUser(socket.user.login);
 				if (matchingUser) {
@@ -83,8 +88,9 @@ const io = socketIo(server)
 				}
 			});
 			sockets.splice(socketIndex, 1);
+			console.log(sockets);
 			console.log(`${socket.id} disconnected`);
-		});
+		}
 	});
 
 // setInterval(updateCommitsCount, 10000);
