@@ -14,24 +14,29 @@ class Controller {
 	}
 
 	socket() {
+		const app = this.app;
 		const name = document.querySelector('[data-user]').getAttribute('data-user');
 		const login = document.querySelector('[data-login]').getAttribute('data-login');
 		const token = document.querySelector('[data-token]').getAttribute('data-token');
-		const option = this.app.$option.value;
+		const option = app.$option.value;
 
-		this.app.socket = io();
-		this.app.socket.name = name;
-		this.app.socket.login = login;
-		this.app.socket.token = token;
-		this.app.socket.option = option;
-		this.app.socket.emit('publishUser', {
-			name,
-			login,
-			token,
-			option
-		});
+		createNewSocket();
 
-		this.app.socket
+		function createNewSocket() {
+			app.socket = io();
+			app.socket.name = name;
+			app.socket.login = login;
+			app.socket.token = token;
+			app.socket.option = option;
+			app.socket.emit('publishUser', {
+				name,
+				login,
+				token,
+				option
+			});
+		}
+
+		app.socket
 			.on('connect', onConnect.bind(this))
 			.on('disconnect', onDisconnect.bind(this))
 			.on('publishUsers', onPublishUsers.bind(this))
@@ -39,10 +44,10 @@ class Controller {
 
 		function onConnect() {
 			console.log('connected');
-			this.app.connected = true;
+			app.connected = true;
 
-			if (this.app.reconnectUnhandled) {
-				this.app.reconnectUnhandled = false
+			if (app.reconnectUnhandled) {
+				app.reconnectUnhandled = false
 				const options = {
 					messages: {
 						offline: 'Connection is lost to the server.',
@@ -72,7 +77,7 @@ class Controller {
 
 			function reconnect() {
 				setTimeout(() => {
-					app.socket = io();
+					createNewSocket();
 					if (!app.connected) {
 						interval = interval * 2;
 						reconnect();
