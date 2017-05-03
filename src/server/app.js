@@ -6,6 +6,7 @@ const compression = require('compression');
 const staticAsset = require('static-asset');
 const ejsExtend = require('express-ejs-extend');
 const socketIo = require('socket.io');
+const session = require('express-session');
 
 const indexRouter = require('./routes/index.js');
 const authRouter = require('./routes/auth.js');
@@ -23,6 +24,11 @@ const app = express()
 	.use(staticAsset(baseDir))
 	.use(express.static(baseDir, {
 		maxAge: 31557600000 // one year
+	}))
+	.use(session({
+		secret: "FDSfaeo78rafrgf7earh78hr78g",
+		resave: false,
+		saveUninitialized: true
 	}))
 	.use('/', indexRouter)
 	.use('/auth', authRouter);

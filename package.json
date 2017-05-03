@@ -47,6 +47,7 @@
     "dotenv": "^4.0.0",
     "ejs": "^2.5.6",
     "express-ejs-extend": "0.0.1",
+    "express-session": "^1.15.2",
     "node.fetch": "^1.0.0",
     "request": "^2.81.0",
     "static-asset": "^0.6.0"

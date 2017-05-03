@@ -15,10 +15,19 @@ function completeAuth(req, res) {
 	github.getToken(req.query.code)
 		.then(token => {
 			github.getUser(token).then(user => {
-				res.render('authenticated/index', {
-					token,
-					user
-				});
+				if (user.login) {
+					req.session.user = user;
+					req.session.token = token;
+				}
+
+				if (req.session.user) {
+					res.render('authenticated/index', {
+						token: req.session.token,
+						user: req.session.user
+					});
+				} else {
+					res.redirect('/');
+				}
 			});
 		});
 }
