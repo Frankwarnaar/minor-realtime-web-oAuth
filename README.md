@@ -71,8 +71,6 @@ I used gulp to build my javascript and scss. Besides that, I used it to run my s
 4. `publishSourceState`: Notify the user that the connection between the server and GitHub is restored/broken
 
 ## Data life
-
-### Ranking
 1. A user logs in to GitHub
 2. His name and login name are sent to the server
 3. For each user, the server receives his/her repos. For all these repos, the server gets the commits from the master-branch. The score gets upped one for each commit.
