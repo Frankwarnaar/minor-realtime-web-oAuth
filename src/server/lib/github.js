@@ -1,6 +1,7 @@
 const request = require('./request.js');
 const getParams = require('./params.js');
 const util = require('./util.js');
+const emit = require('./emit.js');
 const cfg = require('./../../cfg.js');
 
 module.exports = {
@@ -25,6 +26,8 @@ module.exports = {
 					resolve(JSON.parse(user));
 				})
 				.catch(err => {
+					console.log('error in user');
+					emit.sourceOffline(true);
 					reject(err);
 				});
 		});
@@ -38,6 +41,8 @@ module.exports = {
 					resolve(JSON.parse(repos));
 				})
 				.catch(err => {
+					console.log('error in repos');
+					emit.sourceOffline(true);
 					reject(err);
 				});
 		});
@@ -64,6 +69,8 @@ module.exports = {
 					resolve(commits);
 				})
 				.catch(err => {
+					console.log('err in commits');
+					emit.sourceOffline(true);
 					reject(err);
 				});
 		});

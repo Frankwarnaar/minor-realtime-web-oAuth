@@ -40,21 +40,21 @@ class Controller {
 			.on('connect', onConnect.bind(this))
 			.on('disconnect', onDisconnect.bind(this))
 			.on('publishUsers', onPublishUsers.bind(this))
-			.on('publishSourceStates', onPublishSourceStates.bind(this));
+			.on('publishSourceState', onPublishSourceState.bind(this));
 
 		function onConnect() {
 			console.log('connected');
 			app.connected = true;
 
 			if (app.reconnectUnhandled) {
-				app.reconnectUnhandled = false
+				app.reconnectUnhandled = false;
 				const options = {
 					messages: {
 						offline: 'Connection is lost to the server.',
 						online: "You're reconnected to the server."
 					},
 					offline: false
-				}
+				};
 				this.app.view.renderDialog(options);
 			}
 		}
@@ -69,10 +69,10 @@ class Controller {
 					online: "You're reconnected to the server."
 				},
 				offline: true
-			}
+			};
 			app.view.renderDialog(options);
 
-			let interval = 1000
+			let interval = 1000;
 			reconnect();
 
 			function reconnect() {
@@ -92,17 +92,16 @@ class Controller {
 			this.app.view.renderUsers();
 		}
 
-		function onPublishSourceStates(offline) {
+		function onPublishSourceState(offline) {
 			const options = {
 				messages: {
 					offline: 'GitHub failed to send live data.',
 					online: "You're now receiving live data from GitHub again."
 				},
 				offline
-			}
-			this.view.renderDialog(options);
+			};
+			app.view.renderDialog(options);
 		}
-
 	}
 
 	emitOption() {

@@ -32,10 +32,10 @@ class View {
 		let $dialog = document.getElementsByClassName('dialog')[0];
 
 		if ($dialog) {
-			$dialog.innerHTML = `<p>${options.messages.online}</p>`;
+			$dialog.innerHTML = `<p>${options.offline ? options.messages.offline : options.messages.online}</p>`;
 		} else {
 			$dialog = document.createElement('dialog');
-			$dialog.innerHTML = `<p>${options.messages.offline}</p>`;
+			$dialog.innerHTML = `<p>${options.offline ? options.messages.offline : options.messages.online}</p>`;
 			$body.appendChild($dialog);
 		}
 		$dialog.setAttribute('open', true);
