@@ -13,15 +13,14 @@ function getHandshake(req, res) {
 
 function completeAuth(req, res) {
 	github.getToken(req.query.code)
-	.then(token => {
-		github.getUser(token)
-	.then(user => {
-		res.render('authenticated/index', {
-			token,
-			user
+		.then(token => {
+			github.getUser(token).then(user => {
+				res.render('authenticated/index', {
+					token,
+					user
+				});
+			});
 		});
-	});
-	});
 }
 
 module.exports = router;

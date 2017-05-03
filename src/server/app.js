@@ -31,12 +31,14 @@ const server = app.listen(port, host, err => {
 	err ? console.error(err) : console.log(`app running on http://localhost:${port}`);
 });
 
-let users = [];
 const sockets = [];
+let users = [];
+let sourceOffline = false;
 
-socketIo(server)
+const io = socketIo(server)
 	.on('connection', socket => {
 		console.log(`Client ${socket.id} connected`);
+		sockets.push(socket);
 
 		socket
 			.on('publishUser', onPublishUser)
@@ -47,6 +49,7 @@ socketIo(server)
 			socket.user = user;
 			socket.user.option = 'currentWeek';
 			let matchingUser = findMatchingUser(user.login);
+
 			if (matchingUser) {
 				matchingUser.active = true;
 			} else {
@@ -54,9 +57,9 @@ socketIo(server)
 				user.active = true;
 				users.push(user);
 			}
-			sockets.push(socket);
+
 			updateCommitsCount();
-			emitUsers();
+			emit.users();
 		}
 
 		function onRegisterUsers(option) {
@@ -71,7 +74,7 @@ socketIo(server)
 				return socket.id === single.id;
 			});
 			currentSocket.option = option;
-			emitUsersToSingle(socket);
+			emit.usersToSingle(socket);
 		}
 
 		function onDisconnect() {
@@ -79,7 +82,7 @@ socketIo(server)
 				const matchingUser = findMatchingUser(socket.user.login);
 				if (matchingUser) {
 					matchingUser.active = false;
-					emitUsers();
+					emit.users();
 				}
 			}
 			const socketIndex = sockets.map((single, i) => {
@@ -88,7 +91,6 @@ socketIo(server)
 				}
 			});
 			sockets.splice(socketIndex, 1);
-			console.log(sockets);
 			console.log(`${socket.id} disconnected`);
 		}
 	});
@@ -131,10 +133,15 @@ function updateCommitsCount() {
 					}
 				});
 				user.scores = scores;
-				emitUsers();
+				emit.users();
+
+				if (sourceOffline) {
+					emit.sourceOffline(false);
+				}
 			});
 		})
 		.catch(err => {
+			emit.sourceOffline(true);
 			console.log(err);
 		});
 	});
@@ -143,8 +150,24 @@ function updateCommitsCount() {
 	})) {
 		Promise.all(promises)
 		.then(() => {
-			emitUsers();
+			emit.users();
 		});
+	}
+}
+
+const emit = {
+	users() {
+		sockets.forEach(socket => {
+			this.usersToSingle(socket);
+		});
+	},
+	usersToSingle(socket) {
+		const users = getPublicUsers(socket.user.option);
+		socket.emit('publishUsers', users);
+	},
+	sourceOffline(state) {
+		sourceOffline = state;
+		io.emit('publishSourceState', state);
 	}
 }
 
@@ -152,17 +175,6 @@ function findMatchingUser(login) {
 	return users.find(user => {
 		return user.login === login;
 	});
-}
-
-function emitUsers() {
-	sockets.forEach(socket => {
-		emitUsersToSingle(socket);
-	});
-}
-
-function emitUsersToSingle(socket) {
-	const users = getPublicUsers(socket.user.option);
-	socket.emit('publishUsers', users);
 }
 
 function getPublicUsers(option) {
