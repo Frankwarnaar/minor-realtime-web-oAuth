@@ -14,7 +14,6 @@ module.exports = {
 	sourceOffline(offline) {
 		if (Array.isArray(this.sockets)) {
 			this.sockets.forEach(socket => {
-				console.log(socket.id);
 				socket.emit('publishSourceState', offline);
 			});
 		}
