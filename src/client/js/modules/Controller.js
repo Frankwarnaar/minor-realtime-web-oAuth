@@ -11,6 +11,7 @@ class Controller {
 	bindEvents() {
 		this.app.$option.addEventListener('input', this.app.view.renderUsers.bind(this));
 		this.app.$option.addEventListener('input', this.emitOption.bind(this));
+		this.app.$form.addEventListener('submit', this.emitUser.bind(this));
 	}
 
 	socket() {
@@ -108,6 +109,13 @@ class Controller {
 	emitOption() {
 		const option = this.app.$option.value;
 		this.app.socket.emit('registerUsers', option);
+	}
+
+	emitUser(e) {
+		e.preventDefault();
+		const name = this.app.$newUser.value;
+		this.app.$newUser.value = '';
+		this.app.socket.emit('publishNewUser', name, this.app.socket.token);
 	}
 }
 

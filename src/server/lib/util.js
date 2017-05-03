@@ -6,7 +6,7 @@ module.exports = {
 	},
 	getPublicUsers(users, option) {
 		users = users.filter(user => {
-			return user.name.length > 0;
+			return user.login.length > 0;
 		});
 		return users.map(user => {
 			return {

@@ -49,6 +49,7 @@ const io = socketIo(server)
 
 		socket
 			.on('publishUser', onPublishUser)
+			.on('publishNewUser', onPublishNewUser)
 			.on('registerUsers', onRegisterUsers)
 			.on('disconnect', onDisconnect);
 
@@ -66,7 +67,17 @@ const io = socketIo(server)
 			}
 
 			updateCommitsCount();
-			emit.users(users);
+		}
+
+		function onPublishNewUser(username, token) {
+			if (!util.findMatchingUser(users, username)) {
+				users.push({
+					login: username,
+					token,
+					active: false
+				});
+				updateCommitsCount();
+			}
 		}
 
 		function onRegisterUsers(option) {

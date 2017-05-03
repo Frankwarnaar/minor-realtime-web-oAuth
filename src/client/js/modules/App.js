@@ -13,7 +13,9 @@ class App {
 	}
 
 	bindElements() {
-		this.$option = document.querySelector('#render-option');
+		this.$option = document.getElementById('render-option');
+		this.$form = document.getElementsByTagName('form')[0];
+		this.$newUser = document.getElementById('new-user');
 	}
 }
 

@@ -9,11 +9,8 @@ class View {
 		let users = this.app.users;
 
 		if (users.length > 0) {
-			users = this.app.users.sort((a, b) => {
-				if (a.scores[option] && b.scores[option]) {
-					return b.scores[option] - a.scores[option];
-				}
-				return 0;
+			users = users.sort((a, b) => {
+				return b.score - a.score;
 			});
 		}
 
@@ -22,7 +19,7 @@ class View {
 			content += `
 				<tr>
 					<td>${i + 1}</td>
-					<td>${user.name}</td>
+					<td>${user.name || user.login}</td>
 					<td>${user.score !== null ? user.score : '<div class="loader"></div>'}</td>
 				</tr>`;
 		});
