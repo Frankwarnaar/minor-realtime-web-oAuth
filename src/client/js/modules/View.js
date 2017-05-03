@@ -30,39 +30,19 @@ class View {
 		$tableBody.innerHTML = content;
 	}
 
-	renderSourceState(offline) {
+	renderDialog(options) {
 		const $body = document.getElementsByTagName('body')[0];
-		let $dialog = document.getElementsByClassName('source-state')[0];
+		let $dialog = document.getElementsByClassName('dialog')[0];
 
 		if ($dialog) {
-			$dialog.innerHTML = "<p>You're now receiving live data from GitHub again.</p>";
-		} else {
-			$dialog = document.createElement('$dialog');
-			$dialog.innerHTML = "<p>GitHub failed to send live data.";
-			$body.appendChild($dialog);
-		}
-		$dialog.setAttribute('open', true);
-		$dialog.className = `source-state ${offline ? 'error' : 'success'}`;
-
-		setTimeout(() => {
-			$dialog.removeAttribute('open');
-		}, 5000);
-	}
-
-
-	renderConnectionStatus(online) {
-		const $body = document.getElementsByTagName('body')[0];
-		let $dialog = document.getElementsByClassName('connection-state')[0];
-
-		if ($dialog) {
-			$dialog.innerHTML = "<p>You're reconnected to the server.</p>";
+			$dialog.innerHTML = `<p>${options.messages.online}</p>`;
 		} else {
 			$dialog = document.createElement('dialog');
-			$dialog.innerHTML = "<p>Connection is lost to the server.</p>";
+			$dialog.innerHTML = `<p>${options.messages.offline}</p>`;
 			$body.appendChild($dialog);
 		}
 		$dialog.setAttribute('open', true);
-		$dialog.className = `connection-state ${online ? 'error' : 'success'}`;
+		$dialog.className = `dialog ${options.offline ? 'error' : 'success'}`;
 
 		setTimeout(() => {
 			$dialog.removeAttribute('open');
