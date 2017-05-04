@@ -26,6 +26,7 @@ In the form on the bottom, you can enter users to the ranking by entering their 
 ## Development
 When developing on this project, run
 ```
+$ npm install
 $ gulp
 ```
 An express server will start running and your files will be watched.
