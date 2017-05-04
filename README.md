@@ -29,6 +29,11 @@ $ gulp
 ```
 An express server will start running and your files will be watched.
 
+## Known issues
+* Scores from two weeks ago can be buggy
+* Only commits on masters branches are counted
+* Commits on other people repo's are not counted
+
 ## Contributing
 
 1. Fork it!
