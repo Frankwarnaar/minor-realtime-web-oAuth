@@ -75,12 +75,27 @@ I used gulp to build my javascript and scss. Besides that, I used it to run my s
 3. `publishUsers`: Update the ranking
 4. `publishSourceState`: Notify the user that the connection between the server and GitHub is restored/broken
 
-## Data life
+## Data life cycle
 1. A user logs in to GitHub
 2. His name and login name are sent to the server
 3. For each user, the server receives his/her repos. For all these repos, the server gets the commits from the master-branch. The score gets upped one for each commit.
 4. If a user changes which week he/she wants to see, an event is sent to the server with the selected option. The server filters the commits by the selected week and sends that score back to the client.
 5. If a client enters a new name in the form, an event will be sent to the server with that name. The server will get the commits done by that user and update all clients with a new ranking including the added person.
+
+## Process
+1. First I managed to make it possible to login with GitHub with oAuth. 
+2. I wrote the a sequence of requests to the GitHub API:
+
+    1. Request the users login name, and name with the oAuth token 
+    2. Request the users repos
+    3. Request the users commits for that repo
+3. After that, I looped over the commits and added score for each week
+4. I displayed the score of a user of all time
+5. I made it possible to filter the data on different weeks
+6. I made sure the users data and his/her token were stored in a session
+7. I wrote code that notifies the user when the server can't receive data from GitHub and when it can receive data after a connection loss
+8. I wrote code that notifies the user when the connection between the server and the client is lost/restored
+9. I wrote code that makes the client attempt to reconnect to the server when the connection his lost
 
 ## Depencencies
 * compression: gzip files sent to the user
