@@ -1,5 +1,6 @@
 # Github Ranking
 This app is a realtime ranking of commits done on github, built with oAuth and sockets. With it you can check how many commits you did last weeks. Besides that, you can compare this to the commits your friends and colleagues did.
+![Screenshot GitHub Ranking](https://raw.githubusercontent.com/Frankwarnaar/minor-realtime-web-oAuth/master/screenshots/app.png)
 
 ## Demo
 [Demo here](https://github-ranking.herokuapp.com/)
