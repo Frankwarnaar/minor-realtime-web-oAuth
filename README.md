@@ -63,6 +63,7 @@ An express server will start running and your files will be watched.
 I used gulp to build my javascript and scss. Besides that, I used it to run my server in development.
 
 ## Events reference
+
 ### Server side
 1. `connection`: Push the new socket an array with all open sockets
 2. `disconnect`: Splice the socket from the sockets array
